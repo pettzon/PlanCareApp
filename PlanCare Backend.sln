@@ -1,0 +1,16 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlanCare Backend", "PlanCare Backend\PlanCare Backend.csproj", "{FBFDB9CA-1BAF-43D4-855A-0E5018201AB8}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FBFDB9CA-1BAF-43D4-855A-0E5018201AB8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FBFDB9CA-1BAF-43D4-855A-0E5018201AB8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FBFDB9CA-1BAF-43D4-855A-0E5018201AB8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FBFDB9CA-1BAF-43D4-855A-0E5018201AB8}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
