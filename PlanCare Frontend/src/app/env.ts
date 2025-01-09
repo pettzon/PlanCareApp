@@ -1,0 +1,1 @@
+export const envPath = {apiUrl: "http://localhost:5086/api/"}
