@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using PlanCare_Backend.Extension;
+using PlanCare_Backend.Hub;
 using Scalar.AspNetCore;
 
 public sealed class Program
@@ -19,10 +20,10 @@ public sealed class Program
 
         builder.Services.AddControllers();
         builder.Services.AddOpenApi();
+        builder.Services.AddSignalR();
         builder.Services.AddExtraServices();
 
         WebApplication app = builder.Build();
-
         if (app.Environment.IsDevelopment())
         {
             app.MapOpenApi();
@@ -32,9 +33,10 @@ public sealed class Program
 #if DEBUG
         app.UseCors("AllOrigins");
 #endif
-
+        
         app.UseHttpsRedirection();
         app.UseAuthentication();
+        app.MapHub<RegistrationLiveHub>("/registration");
         app.MapControllers();
         app.Run();
     }

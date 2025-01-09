@@ -7,7 +7,7 @@ public static class DependencyInjectionService
 {
     public static void AddExtraServices(this IServiceCollection services)
     {
-        services.AddSingleton<IDbService, MockDbService>(); // We use the fake DB service to test things
+        services.AddSingleton<IDbService, MockDbService>(); // Binding the interface to the mock DB service instead
         services.AddSingleton<IVehicleExpirationService, VehicleExpirationService>(); // custom background service implementation instead of IHostedService / BackgroundService for now
     }
 }

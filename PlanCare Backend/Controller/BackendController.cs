@@ -15,9 +15,9 @@ public class BackendController : ControllerBase
     }
 
     [HttpGet("GetVehicles")]
-    public async Task<IActionResult> GetVehicles()
+    public async Task<IActionResult> GetVehicles([FromQuery] string make = "")
     {
-        List<Vehicle> result = await dbService.GetVehiclesAsync();
+        List<Vehicle> result = await dbService.GetVehiclesAsync(make);
         
         return Ok(result);
     }

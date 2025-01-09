@@ -19,22 +19,33 @@ public class MockDbService : IDbService
         throw new NotImplementedException();
     }
 
-    public async Task<List<Vehicle>> GetVehiclesAsync()
+    public async Task<List<Vehicle>> GetVehiclesAsync(string make = "")
     {
-        return vehicles;
+        //async implementation not used for mock data
+        return string.IsNullOrEmpty(make) ? vehicles : vehicles.Where(v => v.Make == make).ToList();
     }
 
     private void CreateMockData()
     {
         Random random = new Random();
+
+        string[] brands =
+        [
+            "Ford",
+            "Holden",
+            "Volvo",
+            "SAAB",
+            "BMW"
+        ];
         
         for (int i = 0; i < 10; i++)
         {
             CountryState state = (CountryState)random.Next(Enum.GetNames<CountryState>().Length);
             TimeSpan addedTimespan = new TimeSpan(0, random.Next(3), random.Next(30));
             DateTime expirationTime = (DateTime.Now).Add(addedTimespan);
+            string make = brands[random.Next(brands.Length)];
             
-            vehicles.Add(new Vehicle(Guid.NewGuid().ToString(), state, DateTime.Now, expirationTime));
+            vehicles.Add(new Vehicle(make,Guid.NewGuid().ToString(), state, DateTime.Now, expirationTime));
         }
     }
 }
