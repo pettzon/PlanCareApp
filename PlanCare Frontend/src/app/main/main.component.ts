@@ -34,9 +34,6 @@ export class MainComponent implements OnInit
     this.GetVehicleData();
   }
 
-  displayedColumns: string[] = ['name', 'weight', 'symbol', 'position'];
-  columnsToDisplay: string[] = this.displayedColumns.slice();
-
   constructor(private service: VehicleServiceService)
   {
     
