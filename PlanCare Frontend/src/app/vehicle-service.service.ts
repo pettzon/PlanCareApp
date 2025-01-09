@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { envPath } from './env';
@@ -16,9 +16,10 @@ export class VehicleServiceService
 
   }
 
-  GetVehicleData(): Observable<any>
+  GetVehicleData(args: any = {}): Observable<any>
   {
     const header = new HttpHeaders().set('Content-type', 'application/json');
-    return this.client.get(this.path + 'Backend/GetVehicles', {headers: header});
+    const options = args.value ? {params: new HttpParams().set(args.param, args.value), headers: header} : {headers: header};
+    return this.client.get(this.path + 'Backend/GetVehicles', options);
   }
 }

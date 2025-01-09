@@ -2,7 +2,7 @@
     <h2> PlanCare Angular + .NET9 & SignalR</h2>
 </div>
 <div>
-    <table mat-table [dataSource]="data" class="mat-elevation-z8">
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
         @for (column of columnData; track column) {
           <ng-container [matColumnDef]="column">
             <th mat-header-cell *matHeaderCellDef> {{column}} </th>
