@@ -8,13 +8,19 @@ namespace PlanCare_Backend.Service.Implementation;
 public class MockDbService : IDbService
 {
     List<Vehicle> vehicles = new List<Vehicle>();
+
+    // fields to better control randomization of expiration date for mock data
+    private int randomHours = 0;
+    private int randomMinutes = 5;
+    private int randomSeconds = 30;
+    private int randomDataEntries = 10;
     
     public MockDbService()
     {
         CreateMockData();
     }
     
-    public async Task<Vehicle> GetVehicleAsync(string registration, CountryState state)
+    public async Task<Vehicle> GetVehicleAsync(string registration, StateCode state)
     {
         throw new NotImplementedException();
     }
@@ -38,10 +44,10 @@ public class MockDbService : IDbService
             "BMW"
         ];
         
-        for (int i = 0; i < 10; i++)
+        for (int i = 0; i < randomDataEntries; i++)
         {
-            CountryState state = (CountryState)random.Next(Enum.GetNames<CountryState>().Length);
-            TimeSpan addedTimespan = new TimeSpan(0, random.Next(3), random.Next(30));
+            StateCode state = (StateCode)random.Next(Enum.GetNames<StateCode>().Length);
+            TimeSpan addedTimespan = new TimeSpan(random.Next(randomHours), random.Next(randomMinutes), random.Next(randomSeconds));
             DateTime expirationTime = (DateTime.Now).Add(addedTimespan);
             string make = brands[random.Next(brands.Length)];
             

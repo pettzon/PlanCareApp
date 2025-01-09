@@ -1,6 +1,6 @@
 ﻿namespace PlanCare_Backend.Data;
 
-public enum CountryState : byte
+public enum StateCode : byte
 {
     UNDEFINED = 0,
     NSW = 1,

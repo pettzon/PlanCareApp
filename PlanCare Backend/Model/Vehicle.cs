@@ -7,11 +7,11 @@ public class Vehicle
 {
     public string Make { get; set; }
     public string RegistrationNumber { get; set; }
-    public CountryState RegistrationState { get; set; }
+    public StateCode RegistrationState { get; set; }
     public DateTime RegistrationDate { get; set; }
     public DateTime ExpirationDate { get; set; }
 
-    public Vehicle(string make, string registrationNumber, CountryState registrationState, DateTime registrationDate, DateTime expirationDate)
+    public Vehicle(string make, string registrationNumber, StateCode registrationState, DateTime registrationDate, DateTime expirationDate)
     {
         Make = make;
         RegistrationNumber = registrationNumber;

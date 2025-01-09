@@ -5,7 +5,7 @@ namespace PlanCare_Backend.Service.Implementation;
 
 public class DbService : IDbService
 {
-    public async Task<Vehicle> GetVehicleAsync(string registration, CountryState state)
+    public async Task<Vehicle> GetVehicleAsync(string registration, StateCode state)
     {
         // Implement method to get a single vehicle by state & registration
         throw new NotImplementedException();
