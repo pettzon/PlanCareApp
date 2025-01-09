@@ -2,14 +2,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { MaterialModule } from '../material/material.module';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { VehicleServiceService } from '../vehicle-service.service';
-import { Vehicle } from '../model/vehicle';
-
-export interface PeriodicElement {
-  name: string;
-  position: number;
-  weight: number;
-  symbol: string;
-}
+import { Vehicle, StateCode } from '../model/vehicle';
 
 @Component({
   selector: 'app-main',
@@ -41,16 +34,23 @@ export class MainComponent implements OnInit
 
   GetVehicleData()
   {
-    this.service.GetVehicleData().subscribe({
+    this.service.GetVehicleData().subscribe(
+    {
       next: (res :any) => 
       {
         this.data = res;
-        console.log(res);
+        console.log(this.data);
       },
       error: (error: any) =>
       {
         console.log(error);
       }
     })
+
+    /* convert from enum values to strings. Sending byte-sized enums over the network is more efficient, and less data stored in a database */
+    for(var i in this.data)
+    {
+        this.data[i].registrationState = StateCode[this.data[i].registrationState];
+    }
   }
 }
