@@ -3,7 +3,7 @@ using PlanCare_Backend.Service.Implementation;
 
 namespace PlanCare_Backend.Extension;
 
-public static class DependencyInjectionService
+public static class DependencyInjectionExtension
 {
     public static void AddExtraServices(this IServiceCollection services)
     {
