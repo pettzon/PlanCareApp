@@ -11,7 +11,7 @@ public class DbService : IDbService
         throw new NotImplementedException();
     }
 
-    public async Task<List<Vehicle>> GetVehiclesAsync(string make = "")
+    public async Task<HashSet<Vehicle>> GetVehiclesAsync(string make = "")
     {
         throw new NotImplementedException();
     }

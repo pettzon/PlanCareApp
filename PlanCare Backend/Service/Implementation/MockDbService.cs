@@ -7,7 +7,7 @@ namespace PlanCare_Backend.Service.Implementation;
 
 public class MockDbService : IDbService
 {
-    List<Vehicle> vehicles = new List<Vehicle>();
+    HashSet<Vehicle> vehicles = new HashSet<Vehicle>();
 
     // fields to better control randomization of expiration date for mock data
     private int randomHours = 0;
@@ -25,10 +25,10 @@ public class MockDbService : IDbService
         throw new NotImplementedException();
     }
 
-    public async Task<List<Vehicle>> GetVehiclesAsync(string make = "")
+    public async Task<HashSet<Vehicle>> GetVehiclesAsync(string make = "")
     {
         //async implementation not used for mock data
-        return string.IsNullOrEmpty(make) ? vehicles : vehicles.Where(v => v.Make == make).ToList();
+        return string.IsNullOrEmpty(make) ? vehicles : vehicles.Where(v => v.Make == make).ToHashSet();
     }
 
     private void CreateMockData()

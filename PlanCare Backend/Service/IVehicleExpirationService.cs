@@ -4,7 +4,7 @@ namespace PlanCare_Backend.Service;
 
 public interface IVehicleExpirationService
 {
-    event Action<Vehicle> OnVehicleExpired;
+    event Action<HashSet<Vehicle>> OnVehiclesExpired;
 
     void StartService();
     void StopService();

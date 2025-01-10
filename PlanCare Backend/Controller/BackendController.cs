@@ -8,16 +8,20 @@ using PlanCare_Backend.Service;
 public class BackendController : ControllerBase
 {
     private readonly IDbService dbService;
+    private readonly IVehicleExpirationService vehicleExpirationService;
     
-    public BackendController(IDbService dbService)
+    public BackendController(IDbService dbService, IVehicleExpirationService vehicleExpirationService)
     {
         this.dbService = dbService;
+        this.vehicleExpirationService = vehicleExpirationService;
+        
+        vehicleExpirationService.StartService();
     }
 
     [HttpGet("GetVehicles")]
     public async Task<IActionResult> GetVehicles([FromQuery] string make = "")
     {
-        List<Vehicle> result = await dbService.GetVehiclesAsync(make);
+        HashSet<Vehicle> result = await dbService.GetVehiclesAsync(make);
         
         return Ok(result);
     }

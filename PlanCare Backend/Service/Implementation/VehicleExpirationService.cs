@@ -4,7 +4,7 @@ namespace PlanCare_Backend.Service.Implementation;
 
 public sealed class VehicleExpirationService : IVehicleExpirationService
 {
-    public event Action<Vehicle>? OnVehicleExpired;
+    public event Action<HashSet<Vehicle>>? OnVehiclesExpired;
 
     private readonly IDbService dbService;
 
@@ -30,7 +30,15 @@ public sealed class VehicleExpirationService : IVehicleExpirationService
     {
         while (await checkExpirationTimer.WaitForNextTickAsync(cancellationToken) && !cancellationToken.IsCancellationRequested)
         {
+            HashSet<Vehicle> vehicles = await dbService.GetVehiclesAsync();
+            HashSet<Vehicle> expiredVehicles = vehicles.Where(v => DateTime.Compare(DateTime.Now, v.ExpirationDate) >= 0).ToHashSet();
+
+            if (expiredVehicles.Count == 0)
+            {
+                continue;
+            }
             
+            OnVehiclesExpired?.Invoke(expiredVehicles);
         }
     }
 }
