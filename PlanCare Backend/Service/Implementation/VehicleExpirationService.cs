@@ -26,6 +26,11 @@ public sealed class VehicleExpirationService : IVehicleExpirationService
         checkExpirationTimerCancellationTokenSource.Cancel();
     }
 
+    /// <summary>
+    /// Checks for expired vehicles and fires an event containing a hashset of the expired vehicles. This would be reworked
+    /// into a more target-oriented setup rather than repeatedly firing off a list of every expired car every time it triggers.
+    /// </summary>
+    /// <param name="cancellationToken"></param>
     private async Task CheckExpirationAsync(CancellationToken cancellationToken)
     {
         while (await checkExpirationTimer.WaitForNextTickAsync(cancellationToken) && !cancellationToken.IsCancellationRequested)
