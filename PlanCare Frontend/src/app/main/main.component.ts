@@ -21,13 +21,16 @@ export class MainComponent implements OnInit
     'registrationNumber',
     'registrationState',
     'registrationDate',
-    'expirationDate'
+    'expirationDate',
   ];
 
   ngOnInit(): void 
   {
     this.activatedRoute.queryParamMap.subscribe((p) => 
       {
+        // Can be made better by reading p and iterating through an array of possible parameters rather than hard-coding "make" and sending the
+        // matching ones as args to the HTTPparams . Used this way for simplicity currently
+        
         const args = {param:"make", value:p.get('make') as string};
         this.GetVehicleData(args);
         console.log(args);

@@ -22,7 +22,7 @@ public class RegistrationLiveHub : Hub<IExpirationServiceClientMethods>
     {
         await Clients.All.UpdateExpirationStatus(expiredVehicles);
     }
-
+    
     public override Task OnConnectedAsync()
     {
         return base.OnConnectedAsync();

@@ -9,11 +9,19 @@ export enum StateCode
     TA = 6
 }
 
+export enum VehicleStatus
+{
+    UNKNOWN = 0,
+    REGISTERED = 1,
+    EXPIRED = 2
+}
+
 export interface Vehicle
 {
     make: string,
     registrationNumber: string,
     registrationState: string,
     registrationDate: string,
-    expiryDate: string
+    expiryDate: string,
+    vehicleStatus: string
 }

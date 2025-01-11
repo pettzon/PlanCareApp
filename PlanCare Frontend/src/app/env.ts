@@ -1,1 +1,1 @@
-export const envPath = {apiUrl: "http://localhost:5086/api/"}
+export const envPath = {apiUrl: "http://localhost:5086/api/", vehicleExpirationHub: "http://localhost:5086/registration"}
