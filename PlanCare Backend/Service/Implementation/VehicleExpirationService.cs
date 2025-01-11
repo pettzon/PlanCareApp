@@ -1,4 +1,5 @@
-﻿using PlanCare_Backend.Model;
+﻿using PlanCare_Backend.Data;
+using PlanCare_Backend.Model;
 
 namespace PlanCare_Backend.Service.Implementation;
 
@@ -36,7 +37,7 @@ public sealed class VehicleExpirationService : IVehicleExpirationService
         while (await checkExpirationTimer.WaitForNextTickAsync(cancellationToken) && !cancellationToken.IsCancellationRequested)
         {
             HashSet<Vehicle> vehicles = await dbService.GetVehiclesAsync();
-            HashSet<Vehicle> expiredVehicles = vehicles.Where(v => DateTime.Compare(DateTime.Now, v.ExpirationDate) >= 0).ToHashSet();
+            HashSet<Vehicle> expiredVehicles = vehicles.Where(v => v.CurrentStatus != VehicleStatus.EXPIRED && v.EvaluateStatus() == VehicleStatus.EXPIRED).ToHashSet();
 
             if (expiredVehicles.Count == 0)
             {

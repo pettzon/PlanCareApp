@@ -10,6 +10,7 @@ public class Vehicle
     public StateCode RegistrationState { get; set; }
     public DateTime RegistrationDate { get; set; }
     public DateTime ExpirationDate { get; set; }
+    public VehicleStatus CurrentStatus { get; set; }
 
     public Vehicle(string make, string registrationNumber, StateCode registrationState, DateTime registrationDate, DateTime expirationDate)
     {
@@ -18,5 +19,12 @@ public class Vehicle
         RegistrationState = registrationState;
         RegistrationDate = registrationDate;
         ExpirationDate = expirationDate;
+    }
+
+    // This would be done on the SQL side of things normally
+    public VehicleStatus EvaluateStatus()
+    {
+        CurrentStatus = DateTime.Compare(DateTime.Now, ExpirationDate) >= 0 ? VehicleStatus.EXPIRED : VehicleStatus.REGISTERED;
+        return CurrentStatus;
     }
 }
