@@ -1,17 +1,16 @@
-﻿using Microsoft.AspNetCore.SignalR;
+﻿using System.Diagnostics;
+using Microsoft.AspNetCore.SignalR;
 using PlanCare_Backend.Model;
 using PlanCare_Backend.Service;
+using PlanCare_Backend.Service.Implementation;
 
 namespace PlanCare_Backend.Hub;
 
 public class RegistrationLiveHub : Hub<IExpirationServiceClientMethods>
 {
-    private readonly IVehicleExpirationService vehicleExpirationService;
-    
-    public RegistrationLiveHub(IVehicleExpirationService vehicleExpirationService)
+    public RegistrationLiveHub()
     {
-        this.vehicleExpirationService = vehicleExpirationService;
-        this.vehicleExpirationService.OnVehiclesExpired += OnVehiclesExpired;
+        VehicleExpirationService.OnVehiclesExpired += OnVehiclesExpired;
     }
 
     private void OnVehiclesExpired(HashSet<Vehicle> expiredVehicles)
@@ -22,6 +21,16 @@ public class RegistrationLiveHub : Hub<IExpirationServiceClientMethods>
     private async Task BroadcastVehicleStatus(HashSet<Vehicle> expiredVehicles)
     {
         await Clients.All.UpdateExpirationStatus(expiredVehicles);
+    }
+
+    public override Task OnConnectedAsync()
+    {
+        return base.OnConnectedAsync();
+    }
+
+    public override Task OnDisconnectedAsync(Exception? exception)
+    {
+        return base.OnDisconnectedAsync(exception);
     }
 }
 

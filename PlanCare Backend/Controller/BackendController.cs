@@ -8,14 +8,11 @@ using PlanCare_Backend.Service;
 public class BackendController : ControllerBase
 {
     private readonly IDbService dbService;
-    private readonly IVehicleExpirationService vehicleExpirationService;
     
-    public BackendController(IDbService dbService, IVehicleExpirationService vehicleExpirationService)
+    public BackendController(IDbService dbService)
     {
+        Debug.WriteLine($"Backend Controller Init");
         this.dbService = dbService;
-        this.vehicleExpirationService = vehicleExpirationService;
-        
-        vehicleExpirationService.StartService();
     }
 
     [HttpGet("GetVehicles")]

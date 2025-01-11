@@ -35,7 +35,7 @@ public sealed class Program
 #endif
         
         app.UseHttpsRedirection();
-        app.UseAuthentication();
+        //app.UseAuthentication();
         app.MapHub<RegistrationLiveHub>("/registration");
         app.MapControllers();
         app.Run();

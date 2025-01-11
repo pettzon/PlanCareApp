@@ -1,11 +1,12 @@
-﻿using PlanCare_Backend.Data;
+﻿using System.Diagnostics;
+using PlanCare_Backend.Data;
 using PlanCare_Backend.Model;
 
 namespace PlanCare_Backend.Service.Implementation;
 
-public sealed class VehicleExpirationService : IVehicleExpirationService
+public sealed class VehicleExpirationService : IHostedService, IDisposable
 {
-    public event Action<HashSet<Vehicle>>? OnVehiclesExpired;
+    public static event Action<HashSet<Vehicle>>? OnVehiclesExpired;
 
     private readonly IDbService dbService;
 
@@ -17,15 +18,31 @@ public sealed class VehicleExpirationService : IVehicleExpirationService
         this.dbService = dbService;
     }
     
-    public void StartService()
+    public async Task StartAsync(CancellationToken cancellationToken)
     {
         Task.Run(() => CheckExpirationAsync(checkExpirationTimerCancellationTokenSource.Token));
     }
 
-    public void StopService()
+    public async Task StopAsync(CancellationToken cancellationToken)
     {
-        checkExpirationTimerCancellationTokenSource.Cancel();
+        await checkExpirationTimerCancellationTokenSource.CancelAsync();
     }
+
+    public void Dispose()
+    {
+        
+    }
+    
+    // public void StartService()
+    // {
+    //     Debug.WriteLine("Starting Vehicle Expiration Service");
+    //     Task.Run(() => CheckExpirationAsync(checkExpirationTimerCancellationTokenSource.Token));
+    // }
+    //
+    // public void StopService()
+    // {
+    //     checkExpirationTimerCancellationTokenSource.Cancel();
+    // }
 
     /// <summary>
     /// Checks for expired vehicles and fires an event containing a hashset of the expired vehicles. This would be reworked
@@ -44,6 +61,7 @@ public sealed class VehicleExpirationService : IVehicleExpirationService
                 continue;
             }
             
+            Debug.WriteLine($"Vehicles expired this iteration : {expiredVehicles.Count}");
             OnVehiclesExpired?.Invoke(expiredVehicles);
         }
     }
