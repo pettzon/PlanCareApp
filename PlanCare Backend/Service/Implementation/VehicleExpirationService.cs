@@ -37,7 +37,7 @@ public sealed class VehicleExpirationService : IVehicleExpirationService
         while (await checkExpirationTimer.WaitForNextTickAsync(cancellationToken) && !cancellationToken.IsCancellationRequested)
         {
             HashSet<Vehicle> vehicles = await dbService.GetVehiclesAsync();
-            HashSet<Vehicle> expiredVehicles = vehicles.Where(v => v.CurrentStatus != VehicleStatus.EXPIRED && v.EvaluateStatus() == VehicleStatus.EXPIRED).ToHashSet();
+            HashSet<Vehicle> expiredVehicles = vehicles.Where(v => v.VehicleStatus != VehicleStatus.EXPIRED && v.EvaluateStatus() == VehicleStatus.EXPIRED).ToHashSet();
 
             if (expiredVehicles.Count == 0)
             {
