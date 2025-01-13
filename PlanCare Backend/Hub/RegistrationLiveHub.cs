@@ -8,19 +8,18 @@ namespace PlanCare_Backend.Hub;
 
 public sealed class RegistrationLiveHub : Hub<IExpirationServiceClientMethods>
 {
-    public RegistrationLiveHub()
+    private readonly IDbService dbService;
+    
+    public RegistrationLiveHub(IDbService dbService)
     {
-        
+        this.dbService = dbService;
     }
-
-    private async void OnVehiclesExpired(HashSet<Vehicle> expiredVehicles)
-    {
-        await BroadcastVehicleStatusAsync(expiredVehicles);
-    }
-
-    private async Task BroadcastVehicleStatusAsync(HashSet<Vehicle> expiredVehicles)
-    {
-        await Clients.Others.UpdateExpirationStatus(expiredVehicles);
+    
+    public async Task FetchVehicleData()
+    { 
+        //Debug.WriteLine($"Client {Context.ConnectionId} requesting FetchVehicleData()"); 
+        HashSet<Vehicle> allVehicles = await dbService.GetVehiclesAsync(); 
+        await Clients.Caller.SendAllVehicleData(allVehicles);
     }
     
     public override Task OnConnectedAsync()
@@ -40,5 +39,6 @@ public sealed class RegistrationLiveHub : Hub<IExpirationServiceClientMethods>
 
 public interface IExpirationServiceClientMethods
 {
+    Task SendAllVehicleData(HashSet<Vehicle> allVehicles);
     Task UpdateExpirationStatus(HashSet<Vehicle> expiredVehicles);
 }
