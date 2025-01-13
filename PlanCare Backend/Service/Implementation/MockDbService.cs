@@ -28,7 +28,7 @@ public class MockDbService : IDbService
     public async Task<HashSet<Vehicle>> GetVehiclesAsync(string make = "")
     {
         //async implementation not used for mock data
-        return string.IsNullOrEmpty(make) ? vehicles : vehicles.Where(v => v.Make == make).ToHashSet();
+        return await Task.Run(() => string.IsNullOrEmpty(make) ? vehicles : vehicles.Where(v => v.Make == make).ToHashSet());
     }
 
     private void CreateMockData()
