@@ -1,5 +1,7 @@
 ﻿using System.Diagnostics;
+using Microsoft.AspNetCore.SignalR;
 using PlanCare_Backend.Data;
+using PlanCare_Backend.Hub;
 using PlanCare_Backend.Model;
 
 namespace PlanCare_Backend.Service.Implementation;
@@ -9,13 +11,15 @@ public sealed class VehicleExpirationService : IHostedService, IDisposable
     public static event Action<HashSet<Vehicle>>? OnVehiclesExpired;
 
     private readonly IDbService dbService;
+    private readonly IHubContext<RegistrationLiveHub, IExpirationServiceClientMethods> hubContext;
 
     private readonly CancellationTokenSource checkExpirationTimerCancellationTokenSource = new CancellationTokenSource(); 
     private readonly PeriodicTimer checkExpirationTimer = new PeriodicTimer(TimeSpan.FromSeconds(10));
 
-    public VehicleExpirationService(IDbService dbService)
+    public VehicleExpirationService(IDbService dbService, IHubContext<RegistrationLiveHub, IExpirationServiceClientMethods> hubContext)
     {
         this.dbService = dbService;
+        this.hubContext = hubContext;
     }
     
     public async Task StartAsync(CancellationToken cancellationToken)
@@ -63,6 +67,7 @@ public sealed class VehicleExpirationService : IHostedService, IDisposable
             
             Debug.WriteLine($"Vehicles expired this iteration : {expiredVehicles.Count}");
             OnVehiclesExpired?.Invoke(expiredVehicles);
+            await hubContext.Clients.All.UpdateExpirationStatus(expiredVehicles);
         }
     }
 }

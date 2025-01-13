@@ -6,30 +6,34 @@ using PlanCare_Backend.Service.Implementation;
 
 namespace PlanCare_Backend.Hub;
 
-public class RegistrationLiveHub : Hub<IExpirationServiceClientMethods>
+public sealed class RegistrationLiveHub : Hub<IExpirationServiceClientMethods>
 {
     public RegistrationLiveHub()
     {
-        VehicleExpirationService.OnVehiclesExpired += OnVehiclesExpired;
+        
     }
 
-    private void OnVehiclesExpired(HashSet<Vehicle> expiredVehicles)
+    private async void OnVehiclesExpired(HashSet<Vehicle> expiredVehicles)
     {
-        BroadcastVehicleStatus(expiredVehicles);
+        await BroadcastVehicleStatusAsync(expiredVehicles);
     }
 
-    private async Task BroadcastVehicleStatus(HashSet<Vehicle> expiredVehicles)
+    private async Task BroadcastVehicleStatusAsync(HashSet<Vehicle> expiredVehicles)
     {
-        await Clients.All.UpdateExpirationStatus(expiredVehicles);
+        await Clients.Others.UpdateExpirationStatus(expiredVehicles);
     }
     
     public override Task OnConnectedAsync()
     {
+        //VehicleExpirationService.OnVehiclesExpired += OnVehiclesExpired;
+        Debug.WriteLine($"Connected:{Context.ConnectionId} : Hub : {GetHashCode()}");
         return base.OnConnectedAsync();
     }
 
     public override Task OnDisconnectedAsync(Exception? exception)
     {
+        //VehicleExpirationService.OnVehiclesExpired -= OnVehiclesExpired;
+        Debug.WriteLine($"Disconnected:{Context.ConnectionId} Exception:{exception}");
         return base.OnDisconnectedAsync(exception);
     }
 }
