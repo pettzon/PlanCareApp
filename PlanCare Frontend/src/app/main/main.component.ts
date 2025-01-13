@@ -30,7 +30,7 @@ export class MainComponent implements OnInit
       {
         // Can be made better by reading p and iterating through an array of possible parameters rather than hard-coding "make" and sending the
         // matching ones as args to the HTTPparams . Used this way for simplicity currently
-        
+
         const args = {param:"make", value:p.get('make') as string};
         this.GetVehicleData(args);
         console.log(args);
@@ -62,12 +62,6 @@ export class MainComponent implements OnInit
       }
     })
 
-    /* convert from enum values to strings. Sending byte-sized enums over the network is more efficient, and less data stored in a database */
-    for(var i in this.data)
-    {
-        this.data[i].registrationState = StateCode[this.data[i].registrationState];
-    }
-
-    this.dataSource = this.data;
+    this.dataSource = this.service.ConvertToEndUserFormat(this.data);
   }
 }

@@ -4,7 +4,7 @@ import { MaterialModule } from '../material/material.module';
 import { StateCode, Vehicle } from '../model/vehicle';
 import { VehicleServiceService } from '../vehicle-service.service';
 import { envPath } from '../env';
-import { Subject } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 
 
 @Component({
@@ -16,7 +16,7 @@ import { Subject } from 'rxjs';
 export class RegistrationComponent implements OnInit
 {
   data: any = [];
-  dataSource: any = [];
+  dataSource: Vehicle[] = [];
   columnData: string[] =
   [
     'make',
@@ -28,7 +28,6 @@ export class RegistrationComponent implements OnInit
   ];
 
   hubConnection: signalR.HubConnection = new signalR.HubConnectionBuilder().withUrl(envPath.vehicleExpirationHub, {skipNegotiation: true,transport: signalR.HttpTransportType.WebSockets}).build();
-  UpdateExpirationStatus = new Subject<Vehicle[]>();
 
   constructor(private service: VehicleServiceService)
   {
@@ -36,31 +35,35 @@ export class RegistrationComponent implements OnInit
 
   async ngOnInit()
   {
-    this.GetVehicleData();
-    this.hubConnection.on('UpdateExpirationStatus', (v) => {console.log(v)});
-    this.hubConnection.start().then(() => console.log("Starting SignalR Connection")).catch(e => console.log(e));
+    this.hubConnection.on('UpdateExpirationStatus', (v: Vehicle[]) => {console.log(v); this.UpdateExpirationStatus(v)});
+    this.hubConnection.on('SendAllVehicleData', (v: Vehicle[]) => {console.log(v); this.dataSource = this.service.ConvertToEndUserFormat(v);});
+
+    await this.hubConnection.start().then(() => console.log("Starting SignalR Connection")).catch(e => console.log(e));
+    this.hubConnection.invoke('FetchVehicleData');
   }
 
-  GetVehicleData(args: any = {})
+  UpdateExpirationStatus(expiredVehicles: Vehicle[])
   {
-    this.service.GetVehicleData(args).subscribe(
+    expiredVehicles = this.service.ConvertToEndUserFormat(expiredVehicles);
+    
+    expiredVehicles.forEach(ev => 
     {
-      next: (res :any) => 
+      this.dataSource.forEach(v =>
       {
-        this.data = res;
-      },
-      error: (error: any) =>
-      {
-        console.log(error);
-      }
+        if(ev.registrationNumber == v.registrationNumber)
+        {
+          v.vehicleStatus = ev.vehicleStatus;
+        }
+      })
     })
-  
+  }
+
       /* convert from enum values to strings. Sending byte-sized enums over the network is more efficient, and less data stored in a database */
-    for(var i in this.data)
-    {
-        this.data[i].registrationState = StateCode[this.data[i].registrationState];
-    }
+    // for(var i in this.data)
+    // {
+    //     this.data[i].registrationState = StateCode[this.data[i].registrationState];
+    // }
   
-    this.dataSource = this.data;
-    }
+    // this.dataSource = this.data;
+    // }
 }
